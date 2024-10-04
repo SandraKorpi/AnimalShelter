@@ -33,7 +33,6 @@ public class User implements UserDetails {
     // @ElementCollection: Anger att detta är en lista med element som lagras som en separat tabell kopplad till användaren i databasen.
 // fetch = FetchType.EAGER: Roller hämtas direkt när en användare laddas från databasen, istället för att hämtas vid behov (lazy loading).
 // @Enumerated(EnumType.STRING): Enum-värdena lagras som strängar i databasen, så istället för att lagra ett heltalsvärde för varje enum lagras t.ex. "ROLE_ADMIN" eller "ROLE_USER".
-// private List<Role> roles = new ArrayList<>(): Skapar en lista av roller (enum Role) för varje användare, som representerar användarens behörigheter.
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private List<Role> roles = new ArrayList<>();

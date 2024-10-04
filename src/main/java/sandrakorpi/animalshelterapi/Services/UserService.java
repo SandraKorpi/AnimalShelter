@@ -6,6 +6,7 @@ import sandrakorpi.animalshelterapi.Dtos.RegisterUserDto;
 import sandrakorpi.animalshelterapi.Dtos.UserDto;
 import sandrakorpi.animalshelterapi.Models.User;
 import sandrakorpi.animalshelterapi.Repositories.UserRepository;
+import sandrakorpi.animalshelterapi.exceptions.ResourceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User register(RegisterUserDto registerUserDto) {
+/*public User register(RegisterUserDto registerUserDto) {
         // Kontrollera om användaren redan är reggad.
         if (userRepository.existsByEmail(registerUserDto.getEmail())) {
           throw new UserAlreadyExistsException("Det finns redan ett konto med denna email.");
@@ -38,7 +39,7 @@ public class UserService {
     public UserDto getUserById(long id) {
 
         return convertToUserDto(getUserOrFail(id));
-    }
+    } */
 
     public List<UserDto> findAllUsers() {
 
@@ -51,17 +52,19 @@ public class UserService {
         }
         return userDtoList;
     }
-    public User updateUser(long id, UserDto userDto) {
+    public UserDto updateUser(Long userId, UserDto updatedDto) {
+        User userToUpdate = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User existingUser = getUserOrFail(id);
-        // Konvertera UserDto till User och uppdatera
-        User updatedUser = convertToUser(userDto);
+        userToUpdate.setUserName(updatedDto.getUserName());
+        userToUpdate.setEmail(updatedDto.getEmail());
+        userToUpdate.setPassword(userToUpdate.getPassword());
+        userToUpdate.setRoles(userToUpdate.getRoles());
 
-        // Behåll ID och uppdatera den existerande användaren
-        updatedUser.setUserId(existingUser.getUserId());
-
-        return userRepository.save(updatedUser);
+        User savedUser = userRepository.save(userToUpdate);
+        return convertToUserDto(savedUser); // Konvertera tillbaka till DTO
     }
+
     public void deleteUser(long id) {
 
         User userToDelete = getUserOrFail(id);
@@ -87,6 +90,12 @@ public class UserService {
         userDto.setRoles(user.getRoles());
         return userDto;
     }
+
+    public UserDto getUserById (long id){
+        User user = getUserOrFail(id);
+        return convertToUserDto(user);
+    }
+
 
     public User getUserOrFail(long id) {
         return userRepository.findById(id)

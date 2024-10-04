@@ -37,11 +37,10 @@ return ResponseEntity.ok(userList);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping({"/{id}}"})
-    public ResponseEntity<UserDto> updateUser (@PathVariable long id, UserDto userDto)
+    @PutMapping({"/{id}"})
+    public ResponseEntity<UserDto> updateUser (@PathVariable long id, @RequestBody UserDto userDto)
     {
-        User updatedUser = userService.updateUser(id, userDto);
-        UserDto updatedUserDto = userService.convertToUserDto(updatedUser); // Konvertera tillbaka till UserDto om det behövs
+        UserDto updatedUserDto = userService.updateUser(id, userDto);
         return ResponseEntity.ok(updatedUserDto);
 
     }
