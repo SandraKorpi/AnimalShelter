@@ -1,5 +1,8 @@
 package sandrakorpi.animalshelterapi.Services;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sandrakorpi.animalshelterapi.Dtos.RegisterUserDto;
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -22,24 +25,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-/*public User register(RegisterUserDto registerUserDto) {
-        // Kontrollera om användaren redan är reggad.
-        if (userRepository.existsByEmail(registerUserDto.getEmail())) {
-          throw new UserAlreadyExistsException("Det finns redan ett konto med denna email.");
-        }
-
-        User user = new User();
-        user.setUserName(registerUserDto.getUserName());
-        user.setEmail(registerUserDto.getEmail());
-        //behöver passwordencoder i securityconfig.
-        user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
-
-        return userRepository.save(user);
-    }
-    public UserDto getUserById(long id) {
-
-        return convertToUserDto(getUserOrFail(id));
-    } */
 
     public List<UserDto> findAllUsers() {
 
@@ -54,16 +39,23 @@ public class UserService {
     }
     public UserDto updateUser(Long userId, UserDto updatedDto) {
         User userToUpdate = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Användaren hittades inte"));
 
         userToUpdate.setUserName(updatedDto.getUserName());
         userToUpdate.setEmail(updatedDto.getEmail());
-        userToUpdate.setPassword(userToUpdate.getPassword());
-        userToUpdate.setRoles(userToUpdate.getRoles());
+        userToUpdate.setRoles(updatedDto.getRoles());
+
+        // Kolla om ett nytt lösenord har skickats med i DTO:n och kryptera det i så fall
+        if (updatedDto.getPassword() != null && !updatedDto.getPassword().isEmpty()) {
+            String encodedPassword = passwordEncoder.encode(updatedDto.getPassword());
+            userToUpdate.setPassword(encodedPassword);
+        }
 
         User savedUser = userRepository.save(userToUpdate);
-        return convertToUserDto(savedUser); // Konvertera tillbaka till DTO
+        //konvertera tillbaka till Dto.
+        return convertToUserDto(savedUser);
     }
+
 
     public void deleteUser(long id) {
 
@@ -76,7 +68,7 @@ public class UserService {
         User user = new User();
         user.setUserName(userDto.getUserName());
         user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(userDto.getPassword());
         user.setRoles(userDto.getRoles());
         return user;
     }
@@ -84,12 +76,14 @@ public class UserService {
     public UserDto convertToUserDto (User user)
     {
         UserDto userDto = new UserDto();
+        userDto.setUserId(user.getUserId());
         userDto.setUserName(user.getUsername());
         userDto.setEmail(user.getEmail());
-        userDto.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDto.setPassword(user.getPassword());
         userDto.setRoles(user.getRoles());
         return userDto;
     }
+
 
     public UserDto getUserById (long id){
         User user = getUserOrFail(id);
@@ -100,5 +94,14 @@ public class UserService {
     public User getUserOrFail(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Det finns ingen användare med id:  " + id));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("Användaren hittades inte");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 }
