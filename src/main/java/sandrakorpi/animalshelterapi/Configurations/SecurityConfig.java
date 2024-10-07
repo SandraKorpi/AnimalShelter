@@ -43,6 +43,13 @@ public class SecurityConfig {
             ACCESS_CONTROL_REQUEST_HEADERS,
             ACCESS_CONTROL_ALLOW_CREDENTIALS
     };
+    //Tillåta swagger.
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/webjars/**"
+    };
 
     @Autowired
     public SecurityConfig(
@@ -60,6 +67,7 @@ public class SecurityConfig {
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/auth/**").permitAll()
+                            .requestMatchers(AUTH_WHITELIST).permitAll()
                             .anyRequest()
                             .authenticated();
                 })
