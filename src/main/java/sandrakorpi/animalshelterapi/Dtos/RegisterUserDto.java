@@ -4,19 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import sandrakorpi.animalshelterapi.Enums.Role;
-
-import java.util.List;
+import org.hibernate.annotations.SecondaryRow;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
-
-private long userId;
-    private String email;
+@NoArgsConstructor
+public class RegisterUserDto {
     private String userName;
+    private String email;
     private String password;
-    private List<Role> roles;
 }
