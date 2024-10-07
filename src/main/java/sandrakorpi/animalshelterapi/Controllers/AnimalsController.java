@@ -1,96 +1,80 @@
 package sandrakorpi.animalshelterapi.Controllers;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import sandrakorpi.animalshelterapi.Models.Animals;
 import sandrakorpi.animalshelterapi.Services.AnimalsService;
 import sandrakorpi.animalshelterapi.Dtos.AnimalsDto;
 
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/animals")
 @RequiredArgsConstructor
+@Tag(name = "ANIMALS", description = "Endpoints for managing animals")
 
 public class AnimalsController {
 
     private final AnimalsService animalsService;
 
-    //Hjälpfunktion för att returnera instans av AnimalsDto från Animals
-    private AnimalsDto convertToDto(Animals animal) {
-        return new AnimalsDto(
-                animal.getId(),
-                animal.getName(),
-                animal.getAnimalType(),
-                animal.getBreed(),
-                animal.getAge());
-    }
-
-    //Hjälpfunktion för att hämta alla djur genom konvertering av lista av Animals till lista av AnimalsDto.
-    //Returnerar ResponseEntity
-    private ResponseEntity<List<AnimalsDto>> getAnimalsResponseEntity(List<Animals> animals) {
-        List<AnimalsDto> animalDtos = animals.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(animalDtos);
-    }
-
     @GetMapping("")
+    @Operation(summary = "Get all Animals", description = "Get a list of all animals")
     public ResponseEntity<List<AnimalsDto>>getAllAnimals(){
-        List <Animals> animals = animalsService.getAllAnimals();
-
-        return getAnimalsResponseEntity(animals);
+        List<AnimalsDto> animals = animalsService.getAllAnimals();
+        return ResponseEntity.ok(animals);
     }
 
     @GetMapping("/cats")
+    @Operation(summary = "Get all Cats", description = "Get a list of all cats")
     public ResponseEntity<List<AnimalsDto>> getAllCats() {
-        List<Animals> cats = animalsService.getAllCats();
-
-        return getAnimalsResponseEntity(cats);
+        List<AnimalsDto> cats = animalsService.getAllCats();
+        return ResponseEntity.ok(cats);
     }
 
     @GetMapping("/dogs")
+    @Operation(summary = "Get all Dogs", description = "Get a list of all dogs")
     public ResponseEntity<List<AnimalsDto>> getAllDogs() {
-        List<Animals> dogs = animalsService.getAllDogs();
+        List<AnimalsDto> dogs = animalsService.getAllDogs();
 
-        return getAnimalsResponseEntity(dogs);
+        return ResponseEntity.ok(dogs);
     }
 
 
    @GetMapping("/{id}")
+   @Operation(summary = "Get an animal by ID", description = "Get an animal by its ID.")
     public ResponseEntity<AnimalsDto> getOneAnimal(@PathVariable long id){
-        Optional<Animals> animal = animalsService.getOneAnimal(id);
-
-       if (animal.isPresent()) {
-           return ResponseEntity.ok(convertToDto(animal.get()));
-       } else {
-           return ResponseEntity.notFound().build();
-       }
+        Optional<AnimalsDto> animal = animalsService.getOneAnimal(id);
+        return animal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("")
-    public ResponseEntity<AnimalsDto> createNewAnimal(@RequestBody Animals newAnimal){
-        Animals animal = animalsService.saveAnimal(newAnimal);
-
-        return ResponseEntity.ok(convertToDto(animal));
+    @Operation(summary = "Create a new animal", description = "Add a new animal to the list.")
+    public ResponseEntity<AnimalsDto> createNewAnimal(@RequestBody AnimalsDto animalDto){
+        AnimalsDto createdAnimal = animalsService.createAnimal(animalDto);
+        return ResponseEntity.ok(createdAnimal);
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<AnimalsDto> updateOneAnimal(@PathVariable Long id,
-                                                      @RequestBody Animals newAnimal){
-        Animals patchedAnimal = animalsService.patchAnimal(newAnimal, id);
-        return ResponseEntity.ok(convertToDto(patchedAnimal));
+    @Operation(summary = "Update an existing animal", description = "Update an animal's details by its ID.")
+    public ResponseEntity<Optional<AnimalsDto>> updateOneAnimal(@PathVariable Long id,
+                                                                @RequestBody AnimalsDto animalDto){
+        Optional<Optional<AnimalsDto>> updatedAnimal = Optional.ofNullable(animalsService.updateOneAnimal(id, animalDto));
+        return updatedAnimal.map(ResponseEntity::ok)
+                            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Delete an animal", description = "Delete an animal from the list.")
     public ResponseEntity<String> deleteOneAnimal(@PathVariable long id){
-        animalsService.deleteAnimal(id);
-
-        return ResponseEntity.ok("Removed Successfully");
+        boolean deleted = animalsService.deleteAnimal(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
