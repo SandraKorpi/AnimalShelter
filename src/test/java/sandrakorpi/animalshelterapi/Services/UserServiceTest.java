@@ -53,7 +53,14 @@ class UserServiceTest {
         mockUser.setPassword("password123"); //okrypterat lösenord, krypteras i metoderna.
         mockUser.setRoles(mockUserDto.getRoles());
     }
-
+    @Test
+    void SaveUser() {
+        when(userRepository.save(any(User.class))).thenReturn(mockUser);
+        User userResult = userService.saveUser(mockUserDto);
+        assertNotNull(userResult);
+        assertEquals(mockUserDto.getUserName(), userResult.getUsername());
+        verify(userRepository).save(any(User.class));
+    }
 
     @Test
     void findAllUsers() {
