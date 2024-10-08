@@ -31,8 +31,6 @@ public class SecurityConfig {
     @Value("${frontend.url}")
     private String frontendUrl;
 
-    // "Authorization","Content-Type"
-
     private static final String[] ALLOWED_HEADERS = {
             CONTENT_TYPE,
             AUTHORIZATION,
@@ -66,10 +64,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/auth/**").permitAll()
-                            .requestMatchers(AUTH_WHITELIST).permitAll()
-                            .anyRequest()
-                            .authenticated();
+                    auth.requestMatchers("/api/auth/**").permitAll();
+                    auth.requestMatchers(AUTH_WHITELIST).permitAll();
+                    auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
