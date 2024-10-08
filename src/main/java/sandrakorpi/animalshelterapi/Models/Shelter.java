@@ -2,6 +2,8 @@ package sandrakorpi.animalshelterapi.Models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -17,9 +19,9 @@ public class Shelter {
     private String phone;
     private String email;
     private String availableBeds;
-}
 
-   /* @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "shelter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Animals> animals;
 
 
@@ -36,4 +38,3 @@ public class Shelter {
                 '}';
     }
 }
-*/
