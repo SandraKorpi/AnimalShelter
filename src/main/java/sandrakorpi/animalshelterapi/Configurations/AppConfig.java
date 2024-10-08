@@ -23,7 +23,7 @@ public class AppConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return userService::loadUserByUsername;
+        return userService;
     }
 
     @Bean

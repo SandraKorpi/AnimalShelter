@@ -32,7 +32,7 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getAllUsers()
     {
         List<UserDto> userList = userService.findAllUsers();
-return ResponseEntity.ok(userList);
+        return ResponseEntity.ok(userList);
     }
 
     @DeleteMapping({"/{id}"})

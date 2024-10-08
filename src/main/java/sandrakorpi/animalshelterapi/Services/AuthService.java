@@ -5,46 +5,47 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sandrakorpi.animalshelterapi.Dtos.AuthDto;
+import sandrakorpi.animalshelterapi.Dtos.LoginDto;
+import sandrakorpi.animalshelterapi.Dtos.RegisterUserDto;
+import sandrakorpi.animalshelterapi.Dtos.UserDto;
 import sandrakorpi.animalshelterapi.Models.User;
+import sandrakorpi.animalshelterapi.exceptions.UserAlreadyExistsException;
 
 @Service
 public class AuthService {
 
     private final UserService userService;
-
-    private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
 
     @Autowired
     public AuthService(
             UserService userService,
-            PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager
     ) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
     }
 
-    public User signup(AuthDto authDto) {
-        User user = User.builder()
-                .username(authDto.getUsername())
-                .password(passwordEncoder.encode(authDto.getPassword()))
-                .build();
+    public void signup(RegisterUserDto registerUserDto) {
+        UserDto user = new UserDto();
+        user.setUserName(registerUserDto.getUserName());
+        user.setEmail(registerUserDto.getEmail());
+        user.setPassword(registerUserDto.getPassword());
 
-        return userService.saveUser(user);
+        User newUser = userService.saveUser(user);
+        if (newUser == null) {
+            throw new UserAlreadyExistsException("User already exists");
+        }
     }
 
-    public User authenticate(AuthDto authDto) {
+    public User authenticate(LoginDto loginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authDto.getUsername(),
-                        authDto.getPassword()
+                        loginDto.getUserName(),
+                        loginDto.getPassword()
                 )
         );
 
-        return userService.getUserByUsername(authDto.getUsername());
+        return userService.loadUserByUsername(loginDto.getUserName());
     }
 }
