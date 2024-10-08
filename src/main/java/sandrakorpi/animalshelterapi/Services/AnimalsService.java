@@ -27,7 +27,7 @@ public class AnimalsService {
         );
     }
 
-    //Konverterar från dto till entitet
+    //Konverterar från dto till entitet.
     private Animals convertToEntity(AnimalsDto animalsDto) {
         Animals animal = new Animals();
         animal.setId(animalsDto.getId());

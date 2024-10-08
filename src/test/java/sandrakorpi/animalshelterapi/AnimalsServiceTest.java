@@ -129,7 +129,7 @@ public class AnimalsServiceTest {
         updatedAnimalDto.setName("Odie Updated");
         updatedAnimalDto.setAnimalType("dog");
         updatedAnimalDto.setBreed("Labrador Updated");
-        updatedAnimalDto.setAge(4);//Uppdaterar ålder
+        updatedAnimalDto.setAge(4);//Uppdaterar ålder.
 
         when(animalsRepository.save(any(Animals.class))).thenAnswer(invocation -> {
             Animals updatedAnimal = invocation.getArgument(0);
