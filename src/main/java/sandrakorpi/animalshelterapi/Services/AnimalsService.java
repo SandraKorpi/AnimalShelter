@@ -28,20 +28,20 @@ public class AnimalsService {
     }
 
     //Konverterar från dto till entitet
-        private Animals convertToEntity(AnimalsDto animalsDto) {
-            Animals animal = new Animals();
-            animal.setId(animalsDto.getId());
-            animal.setName(animalsDto.getName());
-            animal.setAnimalType(animalsDto.getAnimalType());
-            animal.setBreed(animalsDto.getBreed());
-            animal.setAge(animalsDto.getAge());
-            return animal;
-        }
+    private Animals convertToEntity(AnimalsDto animalsDto) {
+        Animals animal = new Animals();
+        animal.setId(animalsDto.getId());
+        animal.setName(animalsDto.getName());
+        animal.setAnimalType(animalsDto.getAnimalType());
+        animal.setBreed(animalsDto.getBreed());
+        animal.setAge(animalsDto.getAge());
+        return animal;
+    }
 
     public List<AnimalsDto> getAllAnimals() {
-            return animalsRepository.findAll().stream()
-                    .map(this::convertToDto)
-                    .collect(Collectors.toList());
+        return animalsRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     public List<AnimalsDto> getAllCats() {
@@ -59,17 +59,17 @@ public class AnimalsService {
     }
 
     public Optional<AnimalsDto> getOneAnimal(long id) {
-            return animalsRepository.findById(id)
-                    .map(this::convertToDto);
+        return animalsRepository.findById(id)
+                .map(this::convertToDto);
     }
 
-    public AnimalsDto createAnimal(AnimalsDto animalDto){
-            Animals animal = convertToEntity(animalDto);
-            Animals savedAnimal = animalsRepository.save(animal);
-            return convertToDto(savedAnimal);
+    public AnimalsDto createAnimal(AnimalsDto animalDto) {
+        Animals animal = convertToEntity(animalDto);
+        Animals savedAnimal = animalsRepository.save(animal);
+        return convertToDto(savedAnimal);
     }
 
-    public Optional<AnimalsDto> updateOneAnimal(Long id, AnimalsDto animalDto){
+    public Optional<AnimalsDto> updateOneAnimal(Long id, AnimalsDto animalDto) {
         return animalsRepository.findById(id).map(existingAnimal -> {
 
             if (animalDto.getName() != null) existingAnimal.setName(animalDto.getName());
@@ -78,11 +78,14 @@ public class AnimalsService {
             if (animalDto.getAge() > 0) existingAnimal.setAge(animalDto.getAge());
 
             return convertToDto(animalsRepository.save(existingAnimal));
-            });
+        });
     }
 
-    public boolean deleteAnimal(Long id){
-        animalsRepository.deleteById(id);
+    public boolean deleteAnimal(Long id) {
+        if (animalsRepository.existsById(id)) {
+            animalsRepository.deleteById(id);
+            return true;
+        }
         return false;
     }
 }
