@@ -17,7 +17,7 @@ import java.util.List;
 //Ska endast komma åt om du är admin, behöver justeras i securityconfig.
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 //För swagger
-@Tag(name = "USERS", description = "Endpoints for managing users")
+@Tag(name = "USERS", description = "Endpoints for managing users, only for Admin-role.g")
 public class UserController {
 
     private final UserService userService;
