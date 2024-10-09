@@ -80,7 +80,7 @@ public class SecurityConfig {
 
         configuration.setAllowCredentials(true);
         //swagger
-        configuration.setAllowedOrigins(List.of(frontendUrl, "http://localhost:8080"));
+        configuration.setAllowedOrigins(List.of(frontendUrl, "http://localhost:5000"));
         configuration.setAllowedHeaders(List.of(ALLOWED_HEADERS));
         configuration.setExposedHeaders(List.of(ALLOWED_HEADERS));
         configuration.setAllowedMethods(List.of(POST.name(), GET.name(), PUT.name(), DELETE.name(), PATCH.name(), OPTIONS.name()));
