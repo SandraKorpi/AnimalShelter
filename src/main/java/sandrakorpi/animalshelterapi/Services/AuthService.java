@@ -39,6 +39,9 @@ public class AuthService {
     }
 
     public User authenticate(LoginDto loginDto) {
+
+        User user = userService.loadUserByUsername(loginDto.getUserName());
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDto.getUserName(),
@@ -46,6 +49,6 @@ public class AuthService {
                 )
         );
 
-        return userService.loadUserByUsername(loginDto.getUserName());
+        return user;
     }
 }
