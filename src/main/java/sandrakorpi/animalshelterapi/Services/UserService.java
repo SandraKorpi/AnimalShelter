@@ -11,6 +11,7 @@ import sandrakorpi.animalshelterapi.Dtos.UserDto;
 import sandrakorpi.animalshelterapi.Models.User;
 import sandrakorpi.animalshelterapi.Repositories.UserRepository;
 import sandrakorpi.animalshelterapi.exceptions.ResourceNotFoundException;
+import sandrakorpi.animalshelterapi.exceptions.UserAlreadyExistsException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,11 @@ public class UserService implements UserDetailsService {
     }
 
     public User saveUser(UserDto userDto) {
+
+        if (userRepository.findByUsername(userDto.getUserName()) != null) {
+            throw new UserAlreadyExistsException("Användaren existerar redan");
+        }
+
         User user = new User();
 
         user.setUserName(userDto.getUserName());

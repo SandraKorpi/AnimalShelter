@@ -44,9 +44,12 @@ public class AuthServiceTest {
     @Test
     void testSignupUserAlreadyExists() {
         RegisterUserDto registerUserDto = new RegisterUserDto("username", "email", "password");
-        when (userService.saveUser(any(UserDto.class))).thenReturn(null);
+
+        doThrow(new UserAlreadyExistsException("Användaren existerar redan"))
+                .when(userService).saveUser(any(UserDto.class));
 
         assertThrows(UserAlreadyExistsException.class, () -> authService.signup(registerUserDto));
+
         verify(userService, times(1)).saveUser(any(UserDto.class));
     }
 

@@ -32,10 +32,7 @@ public class AuthService {
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(registerUserDto.getPassword());
 
-        User newUser = userService.saveUser(user);
-        if (newUser == null) {
-            throw new UserAlreadyExistsException("User already exists");
-        }
+        userService.saveUser(user);
     }
 
     public User authenticate(LoginDto loginDto) {
