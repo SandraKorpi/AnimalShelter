@@ -64,8 +64,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/auth/**").permitAll();
                     auth.requestMatchers(AUTH_WHITELIST).permitAll();
+                   auth.requestMatchers("/api/auth/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -79,7 +79,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(List.of(frontendUrl));
+        //swagger
+        configuration.setAllowedOrigins(List.of(frontendUrl, "http://localhost:8080"));
         configuration.setAllowedHeaders(List.of(ALLOWED_HEADERS));
         configuration.setExposedHeaders(List.of(ALLOWED_HEADERS));
         configuration.setAllowedMethods(List.of(POST.name(), GET.name(), PUT.name(), DELETE.name(), PATCH.name(), OPTIONS.name()));

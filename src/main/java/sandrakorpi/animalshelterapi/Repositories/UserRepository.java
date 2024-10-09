@@ -8,5 +8,5 @@ import sandrakorpi.animalshelterapi.Models.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
-    User findByUsername(String username);
+    User findByUserName(String userName);
 }

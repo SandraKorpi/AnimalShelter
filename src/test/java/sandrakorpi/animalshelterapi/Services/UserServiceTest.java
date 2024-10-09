@@ -154,7 +154,7 @@ class UserServiceTest {
 
     @Test
     void loadByUserName(){
-        when(userRepository.findByUsername(mockUser.getUsername())).thenReturn(mockUser);
+        when(userRepository.findByUserName(mockUser.getUsername())).thenReturn(mockUser);
         // Anropa metoden
         UserDetails userDetails = userService.loadUserByUsername(mockUser.getUsername());
         //Kontroll så Userdetails inte är null.
