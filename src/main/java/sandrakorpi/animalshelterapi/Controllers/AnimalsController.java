@@ -70,7 +70,7 @@ public class AnimalsController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Delete an animal", description = "Delete an animal from the list.")
     public ResponseEntity<String> deleteOneAnimal(@PathVariable long id){
         boolean deleted = animalsService.deleteAnimal(id);
