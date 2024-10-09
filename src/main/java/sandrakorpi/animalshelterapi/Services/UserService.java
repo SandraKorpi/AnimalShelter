@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sandrakorpi.animalshelterapi.Dtos.RegisterUserDto;
 import sandrakorpi.animalshelterapi.Dtos.UserDto;
+import sandrakorpi.animalshelterapi.Enums.Role;
 import sandrakorpi.animalshelterapi.Models.User;
 import sandrakorpi.animalshelterapi.Repositories.UserRepository;
 import sandrakorpi.animalshelterapi.exceptions.ResourceNotFoundException;
@@ -41,7 +42,12 @@ public class UserService implements UserDetailsService {
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
         user.setPassword(encodedPassword);
 
-        user.setRoles(userDto.getRoles());
+        // Tilldela roller
+        if (userRepository.count() == 0) {
+            user.addRole(Role.ROLE_ADMIN); // Första användaren får ADMIN-roll
+        } else {
+            user.addRole(Role.ROLE_USER); // Andra användare får USER-roll
+        }
 
         return userRepository.save(user);
     }

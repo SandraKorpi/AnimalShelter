@@ -21,32 +21,30 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//User details för spring security.
 public class User implements UserDetails {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
+
     private String email;
     private String userName;
     private String password;
-
-    // @ElementCollection: Anger att detta är en lista med element som lagras som en separat tabell kopplad till användaren i databasen.
-// fetch = FetchType.EAGER: Roller hämtas direkt när en användare laddas från databasen, istället för att hämtas vid behov (lazy loading).
-// @Enumerated(EnumType.STRING): Enum-värdena lagras som strängar i databasen, så istället för att lagra ett heltalsvärde för varje enum lagras t.ex. "ROLE_ADMIN" eller "ROLE_USER".
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id")) // Koppla roller till användare
+    @Column(name = "role") // Kolumnnamn i tabellen user_roles
     private List<Role> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.name())) // Skapa SimpleGrantedAuthority från enum
+                .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());
     }
 
     public void addRole(Role role) {
         this.roles.add(role);
-    }
+        }
 
     @Override
     public boolean isAccountNonExpired() {

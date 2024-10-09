@@ -8,22 +8,29 @@ import org.springframework.stereotype.Service;
 import sandrakorpi.animalshelterapi.Dtos.LoginDto;
 import sandrakorpi.animalshelterapi.Dtos.RegisterUserDto;
 import sandrakorpi.animalshelterapi.Dtos.UserDto;
+import sandrakorpi.animalshelterapi.Enums.Role;
 import sandrakorpi.animalshelterapi.Models.User;
+import sandrakorpi.animalshelterapi.Repositories.UserRepository;
 import sandrakorpi.animalshelterapi.exceptions.UserAlreadyExistsException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AuthService {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
 
     @Autowired
     public AuthService(
             UserService userService,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager, UserRepository userRepository
     ) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
     }
 
     public void signup(RegisterUserDto registerUserDto) {
