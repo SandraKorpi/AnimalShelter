@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
 
     public User saveUser(UserDto userDto) {
 
-        if (userRepository.findByUsername(userDto.getUserName()) != null) {
+        if (userRepository.findByUserName(userDto.getUserName()) != null) {
             throw new UserAlreadyExistsException("Användaren existerar redan");
         }
 
