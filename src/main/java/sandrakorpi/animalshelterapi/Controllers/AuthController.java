@@ -1,5 +1,9 @@
 package sandrakorpi.animalshelterapi.Controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(
+            summary = "Register a new user",
+            description = "Registers a new user by providing username, email, and password. If registration is successful, a `201 Created` response is returned. Otherwise, a `400 Bad Request` is returned.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "User successfully registered"),
+                    @ApiResponse(responseCode = "400", description = "Bad request or user already exists")
+            }
+    )
     public ResponseEntity<Void> register(@RequestBody RegisterUserDto registerUserDto) {
         try {
             authService.signup(registerUserDto);
@@ -41,6 +53,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Authenticate user",
+            description = "Authenticates a user with username and password. On success, returns a JWT token and expiration time. On failure, returns a `401 Unauthorized` response.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully authenticated and JWT token returned",
+                            content = @Content(schema = @Schema(implementation = LoginResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid credentials")
+            }
+    )
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDto loginDto) {
         try {
             User authenticatedUser = authService.authenticate(loginDto);
