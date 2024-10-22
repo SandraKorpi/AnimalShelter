@@ -14,12 +14,8 @@ import java.util.Optional;
 public class ShelterService {
 
 
-    private ShelterRepository shelterRepository;
+    private final ShelterRepository shelterRepository;
 
-
-    public ShelterService(ShelterRepository shelterRepository) {
-        this.shelterRepository = shelterRepository;
-    }
 
     public List<Shelter> getAllShelters() {
         return shelterRepository.findAll();
