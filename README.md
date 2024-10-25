@@ -33,11 +33,11 @@ Nedan beskrivs CI/CD processen med förklaringar av de Noder som sekvensen går 
 
 ### Github Actions:
 
+**beskrivning och bilder behövs här!
 
 ### AWS Deployment Process:
-
+**beskrivning och bilder behövs här!
 - AWS Pipeline:
-
 
 - AWS CodeBuild:
 
