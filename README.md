@@ -15,6 +15,7 @@ Elias, Linus, Samuel, Sandra K och Sandra M
 
 - Länk till Applikationen genom AWS EC2: http://animalshelterapi-env.eba-mbz3mefy.eu-north-1.elasticbeanstalk.com
 
+- Länk till vår grupps klient: https://github.com/Lajjaan/FleaMarketService/tree/dev
 
 ## Installation
 1: Besök projektet på GitHub via länken: https://github.com/SandraKorpi/AnimalShelter/tree/dev
