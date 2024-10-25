@@ -39,7 +39,7 @@ Nedan beskrivs CI/CD processen med förklaringar av de Noder som sekvensen går 
 **beskrivning och bilder behövs här!
 
 ### AWS Deployment Process:
-En pipeline sätts upp för att automatisera uppdateringar av applikationen. När kod ändras i GitHub eller ett annat versionshanteringssystem, triggas pipelinen automatiskt för att bygga och deploya applikationen steg för steg.
+En pipeline sätts upp för att automatisera uppdateringar av applikationen. När kod ändras i GitHub, triggas pipelinen automatiskt för att bygga och deploya applikationen steg för steg.
 - <img width="681" alt="animalshelterPipeline" src="https://github.com/user-attachments/assets/012c6c96-87b7-4665-a7a6-ab5729fc3b0d">
 
 
