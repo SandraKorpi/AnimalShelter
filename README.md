@@ -68,8 +68,9 @@ Databasen är en MySQL databas som är skapad via AWS Amazon RDS - Relational Da
 - Bild tagen från AWS:
 -![image](https://github.com/user-attachments/assets/6098c403-88ac-43ee-92ab-b66258624e11)
 
-- Bild tagen från MySQL Workbench.
-![image](https://github.com/user-attachments/assets/d2bfc7f1-a6a4-425c-9929-7636163e3a0e)
+- Bild tagen från MySQL Workbench:
+
+ ![image](https://github.com/user-attachments/assets/d2bfc7f1-a6a4-425c-9929-7636163e3a0e)
 
 ![image](https://github.com/user-attachments/assets/3cb667d0-933a-4994-a448-93a377cd9f89)
 
