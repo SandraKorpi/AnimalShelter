@@ -61,7 +61,9 @@ Vårt projekt använder Swagger för att enklare kunna dokumentera API:ets Endpo
 - Bild 3:
 
 ## JWT, Authentication och Login.
-(förklaring behövs här)
+I detta projekt används JSON Web Tokens (JWT) för autentisering och sessionshantering. När en användare loggar in, genereras en JWT-token baserad på användarens autentiseringsuppgifter. Denna token skickas sedan med varje förfrågan till servern för att verifiera användarens identitet och behörighet. JWT-tokenen har en expirationstid för att säkerställa att sessionen är tidsbegränsad.
+
+Autentisering sker via ett API med två huvudsakliga endpoints: /api/auth/register och /api/auth/login. Genom register kan nya användare skapas, och genom login kan befintliga användare autentisera sig och erhålla en JWT-token. Denna token valideras sedan vid varje skyddad resurs för att garantera att endast behöriga användare får åtkomst.
 
 ## Databas.
 Databasen är en MySQL databas som är skapad via AWS Amazon RDS - Relational Database Service.
