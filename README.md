@@ -39,13 +39,18 @@ Nedan beskrivs CI/CD processen med förklaringar av de Noder som sekvensen går 
 **beskrivning och bilder behövs här!
 
 ### AWS Deployment Process:
-**beskrivning och bilder behövs här!
-- AWS Pipeline:
+En pipeline sätts upp för att automatisera uppdateringar av applikationen. När kod ändras i GitHub eller ett annat versionshanteringssystem, triggas pipelinen automatiskt för att bygga och deploya applikationen steg för steg.
+- <img width="681" alt="animalshelterPipeline" src="https://github.com/user-attachments/assets/012c6c96-87b7-4665-a7a6-ab5729fc3b0d">
+
 
 - AWS CodeBuild:
-
+- Codebuild innehåller instruktioner för hur koden ska byggas och deployas. Filen används för att kompilera koden, köra tester och skapa en körbar version av applikationen.
+<img width="650" alt="animalshelterbuild-fil" src="https://github.com/user-attachments/assets/ebd2308e-c530-482a-a669-2fb5f64a4a36">
+<img width="653" alt="animalshelterbuild" src="https://github.com/user-attachments/assets/4cc88309-f7d8-4056-bb8c-b51245f416b7">
 
 - AWS BeanStalk:
+- Elastic Beanstalk använder ett environment för att köra och hantera applikationen, vilket innebär att alla resurser som behövs för att applikationen ska fungera skapas automatiskt.
+<img width="682" alt="animalshelterenv" src="https://github.com/user-attachments/assets/eaedb929-0500-4030-a01a-3b7946931e5f">
 
 
 - AWS RDS kommer nedan.
